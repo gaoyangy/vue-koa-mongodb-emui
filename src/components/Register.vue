@@ -2,22 +2,20 @@
 	<el-row>
     <el-col :xs="24" :sm="{span: 6,offset: 9}">
       <span class="title">
-        欢迎登录
+        欢迎注册
       </span>
       <el-row>
         <el-input v-model="account" placeholder="账号" type="text"></el-input>
         <el-input v-model="password" placeholder="密码" type="password" @keyup.enter.native="loginToDo"></el-input>
-        <el-button type="primary" @click="loginToDo">登录</el-button>
-        <router-link to="/register">Register</router-link>
+        <el-button type="primary" @click="loginToDo">注册</el-button>
       </el-row>
     </el-col>
 	</el-row>
 </template>
 
 <script>
-//  <router-link :to="{name: 'Register'}">Register</router-link>
- import Register from '@/components/Register';
   import md5 from 'md5';
+
   export default {
     data() {
       return {
@@ -36,7 +34,7 @@
             sessionStorage.setItem('demo-token', res.data.token);
             this.$message({
               type: 'success',
-              message: '登录成功'
+              message: '注册成功'
             });
             this.$router.push('/todolist');
           } else {

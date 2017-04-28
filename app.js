@@ -2,26 +2,30 @@ const Koa = require('koa');
 const json = require('koa-json');
 const logger = require('koa-logger');
 const bodyParser = require('koa-bodyparser');
-const mongoose = require('mongoose');
-const dbUrl = 'mongodb://localhost:27017/todolist';
-const auth = require('./server/routes/auth');
-const api = require('./server/routes/api');
 const jwt = require('koa-jwt');
 const path = require('path');
 const serve = require('koa-static');
 const historyApiFallback = require('koa-history-api-fallback');
-
-mongoose.connect(dbUrl);
-mongoose.Promise = global.Promise;
+//数据库配置
+const mongoose = require('mongoose');
+const db = require('./db/db');
+//引入路由
+const api = require('./server/routes/api');
 
 const app = new Koa();
+//乱七八糟的中间价
 app.use(bodyParser());
 app.use(json());
 app.use(logger());
-
 app.use(historyApiFallback());
-app.use(serve(path.resolve('dist')));
 
+app.use(serve(path.resolve('dist')));
+//数据库连接
+mongoose.connect(db.mongodb);
+mongoose.Promise = global.Promise;
+app.use(jwt({ secret: db.session.secret }));
+//路由注册
+app.use(api.routes());
 // 显示执行时间
 app.use(async(ctx, next) => {
     const start = new Date();
@@ -45,16 +49,15 @@ app.use(async(ctx, next) => {
         }
     }
 });
-app.use(auth.routes());
-app.use(jwt({ secret: 'vue-koa-demo' }));
-app.use(api.routes());
 
 // 错误处理
 app.on('error', function(err) {
     log.error('server error', err);
 });
+//监听
 app.listen(3000, () => {
-    console.log('koa is listening in 8889');
+    console.log('koa is listening in 3000');
 });
+
 
 module.exports = app;
