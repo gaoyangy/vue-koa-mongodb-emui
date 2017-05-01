@@ -8,15 +8,12 @@
         <el-input v-model="account" placeholder="账号" type="text"></el-input>
         <el-input v-model="password" placeholder="密码" type="password" @keyup.enter.native="loginToDo"></el-input>
         <el-button type="primary" @click="loginToDo">登录</el-button>
-        <router-link to="/register">Register</router-link>
       </el-row>
     </el-col>
 	</el-row>
 </template>
 
 <script>
-//  <router-link :to="{name: 'Register'}">Register</router-link>
- import Register from '@/components/Register';
   import md5 from 'md5';
   export default {
     data() {
