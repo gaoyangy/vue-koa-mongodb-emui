@@ -3,18 +3,18 @@ const json = require('koa-json');
 const logger = require('koa-logger');
 const bodyParser = require('koa-bodyparser');
 const mongoose = require('mongoose');
-const db = require('./db/db');
+const dbUrl = 'mongodb://localhost:27017/todolist';
+const auth = require('./server/routes/auth');
 const api = require('./server/routes/api');
 const jwt = require('koa-jwt');
 const path = require('path');
 const serve = require('koa-static');
 const historyApiFallback = require('koa-history-api-fallback');
-//链接数据库
-mongoose.connect(db.mongodb);
+
+mongoose.connect(dbUrl);
 mongoose.Promise = global.Promise;
 
 const app = new Koa();
-//乱七八糟中间件
 app.use(bodyParser());
 app.use(json());
 app.use(logger());
@@ -29,7 +29,6 @@ app.use(async(ctx, next) => {
     const ms = new Date() - start;
     console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
-//用户验证
 app.use(async(ctx, next) => {
     try {
         await next();
@@ -46,8 +45,7 @@ app.use(async(ctx, next) => {
         }
     }
 });
-app.use(jwt({ secret: db.secret }));
-//后端路由注册
+app.use(jwt({ secret: 'vue-koa-demo' }));
 app.use(api.routes());
 
 // 错误处理
