@@ -2,7 +2,7 @@
   "name": "vue-todo",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "unsad <wzxaylryw@hotmail.com>",
+  "author": "gaoyangy <13373935140@163.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
